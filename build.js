@@ -10,4 +10,5 @@ esbuild.buildSync({
   define: {
     global: "self",
   },
+    inject:['process.js']
 });
