@@ -8,7 +8,7 @@
         "test": "jest",
         "build-script": "tsc --project tsconfig.build.json && mv dist-build/build.js dist-build/build.mjs",
         "compile": "npm run build-script && node build.js",
-        "build": "npm run compile && node ./dist-build/build.mjs dev"
+        "build": "npm run compile && rimraf node_modules/@hyperswarm/secret-stream/node_modules && node ./dist-build/build.mjs dev"
     },
     "type": "module",
     "dependencies": {
@@ -16,6 +16,7 @@
         "hyperswarm": "^4.0.2",
         "libkmodule": "^0.2.12",
         "libskynet": "^0.0.62",
+        "noise-handshake": "https://github.com/LumeWeb/noise-handshake.git",
         "randombytes": "https://github.com/LumeWeb/randombytes-browser.git"
     },
     "devDependencies": {
