@@ -4,7 +4,8 @@ import type { ActiveQuery } from "libkmodule";
 import { addHandler, getSeed, handleMessage } from "libkmodule";
 import { handlePresentSeed as handlePresentSeedModule } from "libkmodule/dist/seed.js";
 import { nextId } from "./id";
-import { Buffer } from "buffer";
+import type { Buffer } from "buffer";
+import {hexToBuf} from "libskynet";
 
 interface DhtConnection {
   dht: number;
@@ -89,7 +90,7 @@ async function handleConnect(aq: ActiveQuery) {
   try {
     // @ts-ignore
     socket = await dht.connect(
-      typeof pubkey === "string" ? Buffer.from(pubkey, "hex") : pubkey,
+      typeof pubkey === "string" ? hexToBuf(pubkey) : pubkey,
       options
     );
   } catch (e: any) {
