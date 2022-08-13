@@ -26,6 +26,7 @@ addHandler("connect", handleConnect);
 addHandler("listenSocketEvent", handleListenSocketEvent, {
   receiveUpdates: true,
 });
+addHandler("socketExists", handleSocketExists);
 addHandler("close", handleCloseSocketEvent);
 addHandler("write", handleWriteSocketEvent);
 addHandler("addRelay", handleAddRelay);
@@ -147,6 +148,12 @@ function handleListenSocketEvent(aq: ActiveQuery) {
         break;
     }
   });
+}
+
+async function handleSocketExists(aq: ActiveQuery) {
+  const { id = null } = aq.callerInput;
+
+  aq.respond(hasDhtConnection(Number(id)));
 }
 
 function handleCloseSocketEvent(aq: ActiveQuery) {
