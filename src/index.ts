@@ -5,7 +5,7 @@ import { addHandler, getSeed, handleMessage } from "libkmodule";
 import { handlePresentSeed as handlePresentSeedModule } from "libkmodule/dist/seed.js";
 import { nextId } from "./id";
 import type { Buffer } from "buffer";
-import {hexToBuf} from "libskynet";
+import { hexToBuf } from "libskynet";
 
 interface DhtConnection {
   dht: number;
@@ -33,6 +33,7 @@ addHandler("addRelay", handleAddRelay);
 addHandler("removeRelay", handleRemoveRelay);
 addHandler("clearRelays", handleClearRelays);
 addHandler("getRelays", handleGetRelays);
+addHandler("getRelayServers", handleGetRelayServers);
 addHandler("ready", handleReady);
 
 async function handlePresentSeed(aq: ActiveQuery) {
@@ -260,13 +261,22 @@ function handleClearRelays(aq: ActiveQuery) {
 }
 
 function handleGetRelays(aq: ActiveQuery) {
-    const dht = validateDht(aq);
+  const dht = validateDht(aq);
 
-    if (!dht) {
-        return;
-    }
+  if (!dht) {
+    return;
+  }
 
-    aq.respond(dht.relays);
+  aq.respond(dht.relays);
+}
+function handleGetRelayServers(aq: ActiveQuery) {
+  const dht = validateDht(aq);
+
+  if (!dht) {
+    return;
+  }
+
+  aq.respond(dht.relayServers);
 }
 
 async function handleReady(aq: ActiveQuery) {
