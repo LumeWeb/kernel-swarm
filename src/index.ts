@@ -91,7 +91,7 @@ async function handleConnect(aq: ActiveQuery) {
   try {
     // @ts-ignore
     socket = await dht.connect(
-      typeof pubkey === "string" ? hexToBuf(pubkey) : pubkey,
+      typeof pubkey === "string" ? hexToBuf(pubkey).shift() : pubkey,
       options
     );
   } catch (e: any) {
