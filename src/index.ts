@@ -32,6 +32,7 @@ addHandler("write", handleWriteSocketEvent);
 addHandler("addRelay", handleAddRelay);
 addHandler("removeRelay", handleRemoveRelay);
 addHandler("clearRelays", handleClearRelays);
+addHandler("getRelays", handleGetRelays);
 addHandler("ready", handleReady);
 
 async function handlePresentSeed(aq: ActiveQuery) {
@@ -256,6 +257,16 @@ function handleClearRelays(aq: ActiveQuery) {
   dht.clearRelays();
 
   aq.respond();
+}
+
+function handleGetRelays(aq: ActiveQuery) {
+    const dht = validateDht(aq);
+
+    if (!dht) {
+        return;
+    }
+
+    aq.respond(dht.relays);
 }
 
 async function handleReady(aq: ActiveQuery) {
