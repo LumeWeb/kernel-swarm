@@ -150,21 +150,31 @@ function handleListenSocketEvent(aq: ActiveQuery) {
     return;
   }
 
+  let responded = false;
+  const respond = () => {
+    if (responded) {
+      return;
+    }
+
+    responded = true;
+    aq.respond();
+  };
+
   const cb = (data: Buffer) => {
     aq.sendUpdate(data);
   };
 
   socket.on(event, cb);
   socket.on("close", () => {
-    socket.off(socket, cb);
-    aq.respond();
+    socket.off(event, cb);
+    respond();
   });
 
   aq.setReceiveUpdate?.((data: any) => {
     switch (data?.action) {
       case "off":
-        socket.off(socket, cb);
-        aq.respond();
+        socket.off(event, cb);
+        respond();
         break;
     }
   });
