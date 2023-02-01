@@ -203,9 +203,9 @@ async function handleAddRelay(aq: ActiveQuery) {
     return;
   }
 
-  const dht = await getSwarm(aq);
+  const swarm = await getSwarm(aq);
 
-  aq.respond(await dht.addRelay(pubkey));
+  aq.respond(await swarm.addRelay(pubkey));
 }
 
 async function handleRemoveRelay(aq: ActiveQuery) {
@@ -216,15 +216,15 @@ async function handleRemoveRelay(aq: ActiveQuery) {
     return;
   }
 
-  const dht = await getSwarm(aq);
+  const swarm = await getSwarm(aq);
 
-  aq.respond(dht.removeRelay(pubkey));
+  aq.respond(swarm.removeRelay(pubkey));
 }
 
 async function handleClearRelays(aq: ActiveQuery) {
-  const dht = await getSwarm(aq);
+  const swarm = await getSwarm(aq);
 
-  dht.clearRelays();
+  swarm.clearRelays();
 
   aq.respond();
 }
