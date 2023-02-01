@@ -3,12 +3,12 @@ import esbuild from "esbuild";
 esbuild.buildSync({
   entryPoints: ["src/index.ts"],
   outfile: "dist/index.js",
-  format: "esm",
+  format: "iife",
   bundle: true,
   legalComments: "external",
   //  minify: true
   define: {
     global: "self",
   },
-    inject:['process.js']
+  inject: ["process.js"],
 });
