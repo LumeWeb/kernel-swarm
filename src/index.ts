@@ -49,6 +49,7 @@ addHandler("addRelay", handleAddRelay);
 addHandler("removeRelay", handleRemoveRelay);
 addHandler("clearRelays", handleClearRelays);
 addHandler("getRelays", handleGetRelays);
+addHandler("init", handleInit);
 addHandler("ready", handleReady);
 
 async function handlePresentSeed(aq: ActiveQuery) {
@@ -282,9 +283,25 @@ async function handleGetPeerByPubkey(aq: ActiveQuery) {
   );
 }
 
+async function handleInit(aq: ActiveQuery) {
+  const swarm = await getSwarm(aq);
+  try {
+    await swarm.init();
+  } catch (e) {
+    aq.reject((e as Error).message);
+    return;
+  }
+
+  aq.respond();
+}
 async function handleReady(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
-  // @ts-ignore
-  await swarm.ready();
-  aq.respond();
+
+  if (swarm.activeRelay) {
+    aq.respond();
+    return;
+  }
+  swarm.once("ready", () => {
+    aq.respond();
+  });
 }
