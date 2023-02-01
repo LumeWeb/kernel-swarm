@@ -1,20 +1,21 @@
 // @ts-ignore
-import DHT from "@lumeweb/dht-web";
+import Hyperswarm from "@lumeweb/hyperswarm-web";
 import type { ActiveQuery } from "libkmodule";
 import { addHandler, getSeed, handleMessage } from "libkmodule";
 import { handlePresentSeed as handlePresentSeedModule } from "libkmodule/dist/seed.js";
 import type { Buffer } from "buffer";
-import { hexToBuf } from "libskynet";
+import * as ed from "@noble/ed25519";
+import b4a from "b4a";
 
 interface DhtConnection {
-  dht: number;
+  swarm: number;
   conn: any;
 }
 
 const connections = new Map<number, DhtConnection>();
-const dhtInstances = new Map<number, DHT>();
+const swarmInstances = new Map<number, Hyperswarm>();
 
-let defaultDht: DHT;
+let defaultSwarm: Hyperswarm;
 
 let moduleReadyResolve: Function;
 let moduleReady: Promise<void> = new Promise((resolve) => {
@@ -22,118 +23,65 @@ let moduleReady: Promise<void> = new Promise((resolve) => {
 });
 
 onmessage = handleMessage;
-function idFactory(start = 1, step = 1, limit = 2 ** 32) {
+function idFactory(start = 1) {
   let id = start;
 
   return function nextId() {
     const nextId = id;
-    id += step;
-    if (id >= limit) id = start;
+    id += 1;
     return nextId;
   };
 }
 
-const nextId = idFactory(1);
+const getSwarmId = idFactory();
+const getSocketId = idFactory();
 
 addHandler("presentSeed", handlePresentSeed);
-addHandler("openDht", handleOpenDht);
-addHandler("closeDht", handleCloseDht);
-addHandler("connect", handleConnect);
+addHandler("joinPeer", handleJoinPeer);
+addHandler("getPeerByPubkey", handleGetPeerByPubkey);
 addHandler("listenSocketEvent", handleListenSocketEvent, {
   receiveUpdates: true,
 });
 addHandler("socketExists", handleSocketExists);
 addHandler("close", handleCloseSocketEvent);
-addHandler("write", handleWriteSocketEvent);
+addHandler("socketWrite", handleWriteSocketEvent);
 addHandler("addRelay", handleAddRelay);
 addHandler("removeRelay", handleRemoveRelay);
 addHandler("clearRelays", handleClearRelays);
 addHandler("getRelays", handleGetRelays);
-addHandler("getRelayServers", handleGetRelayServers);
 addHandler("ready", handleReady);
 
 async function handlePresentSeed(aq: ActiveQuery) {
-  const keyPair = aq.callerInput.myskyRootKeypair;
-  handlePresentSeedModule({ callerInput: { seed: keyPair } } as ActiveQuery);
-  if (!defaultDht) {
-    defaultDht = dhtInstances.get(await createDht()) as DHT;
+  handlePresentSeedModule({
+    callerInput: {
+      seed: {
+        publicKey: await ed.getPublicKey(aq.callerInput.rootKey),
+        secretKey: aq.callerInput.rootKey,
+      },
+    },
+  } as ActiveQuery);
+
+  if (!defaultSwarm) {
+    defaultSwarm = swarmInstances.get(await createSwarm()) as Hyperswarm;
   }
   moduleReadyResolve();
 }
 
-async function handleOpenDht(aq: ActiveQuery) {
-  const id = await createDht();
-  aq.respond({ dht: id });
-}
+async function createSwarm(): Promise<number> {
+  const swarmInstance = new Hyperswarm({ keyPair: await getSeed() });
+  const id = getSwarmId();
+  swarmInstances.set(id, swarmInstance);
 
-async function handleCloseDht(aq: ActiveQuery) {
-  const { dht = null } = aq.callerInput;
+  swarmInstance.on("connection", (peer) => {
+    const socketId = getSocketId();
+    connections.set(socketId, { swarm: id, conn: peer });
 
-  if (!dht) {
-    aq.reject("Invalid DHT id");
-    return;
-  }
-
-  if (dht === defaultDht) {
-    aq.reject("Cannot close default DHT");
-    return;
-  }
-
-  dhtInstances.delete(dht);
-  Array.from(connections.values())
-    .filter((item) => item.dht === dht)
-    .forEach((item) => {
-      item.conn.end();
+    peer.on("close", () => {
+      connections.delete(socketId);
     });
+  });
 
-  aq.respond();
-}
-
-async function createDht(): Promise<number> {
-  const dhtInstance = new DHT({ keyPair: await getSeed() });
-  const id = nextId();
-  dhtInstances.set(id, dhtInstance);
   return id;
-}
-
-async function handleConnect(aq: ActiveQuery) {
-  const { pubkey, options = {} } = aq.callerInput;
-
-  let socket: any;
-
-  const dht = await getDht(aq);
-
-  try {
-    // @ts-ignore
-    socket = await dht.connect(
-      typeof pubkey === "string" ? hexToBuf(pubkey).shift() : pubkey,
-      options
-    );
-  } catch (e: any) {
-    aq.reject(e);
-    return;
-  }
-
-  const id = nextId();
-
-  socket.on("open", () => {
-    let dhtId: any = [...dhtInstances.entries()].filter(
-      (item) => item[1] === dht
-    );
-    dhtId = dhtId.shift()[0];
-
-    setDhtConnection(id, dhtId as number, socket);
-    aq.respond({ id });
-  });
-
-  socket.on("end", () => {
-    deleteDhtConnection(id);
-  });
-
-  socket.on("error", (e: any) => {
-    deleteDhtConnection(id);
-    aq.reject(e);
-  });
 }
 
 function handleListenSocketEvent(aq: ActiveQuery) {
@@ -183,7 +131,7 @@ function handleListenSocketEvent(aq: ActiveQuery) {
 async function handleSocketExists(aq: ActiveQuery) {
   const { id = null } = aq.callerInput;
 
-  aq.respond(hasDhtConnection(Number(id)));
+  aq.respond(connections.has(Number(id)));
 }
 
 function handleCloseSocketEvent(aq: ActiveQuery) {
@@ -219,32 +167,32 @@ function handleWriteSocketEvent(aq: ActiveQuery) {
 function validateConnection(aq: ActiveQuery): any | boolean {
   const { id = null } = aq.callerInput;
 
-  if (!id || !hasDhtConnection(id)) {
+  if (!id || !connections.has(id)) {
     aq.reject("Invalid connection id");
     return false;
   }
 
-  return getDhtConnection(id)?.conn;
+  return connections.get(id)?.conn;
 }
 
-async function getDht(aq: ActiveQuery): Promise<DHT> {
+async function getSwarm(aq: ActiveQuery): Promise<Hyperswarm> {
   await moduleReady;
-  let dht;
+  let swarm;
   if ("callerInput" in aq && aq.callerInput) {
-    dht = aq.callerInput.dht ?? null;
+    swarm = aq.callerInput.swarm ?? null;
 
-    if (dht && !dhtInstances.has(dht)) {
-      const error = "Invalid DHT id";
+    if (swarm && !swarmInstances.has(swarm)) {
+      const error = "Invalid swarm id";
       aq.reject(error);
       throw new Error(error);
     }
   }
 
-  if (!dht) {
-    return defaultDht;
+  if (!swarm) {
+    return defaultSwarm;
   }
 
-  return dhtInstances.get(dht) as DHT;
+  return swarmInstances.get(swarm) as Hyperswarm;
 }
 
 async function handleAddRelay(aq: ActiveQuery) {
@@ -255,7 +203,7 @@ async function handleAddRelay(aq: ActiveQuery) {
     return;
   }
 
-  const dht = await getDht(aq);
+  const dht = await getSwarm(aq);
 
   aq.respond(await dht.addRelay(pubkey));
 }
@@ -268,13 +216,13 @@ async function handleRemoveRelay(aq: ActiveQuery) {
     return;
   }
 
-  const dht = await getDht(aq);
+  const dht = await getSwarm(aq);
 
   aq.respond(dht.removeRelay(pubkey));
 }
 
 async function handleClearRelays(aq: ActiveQuery) {
-  const dht = await getDht(aq);
+  const dht = await getSwarm(aq);
 
   dht.clearRelays();
 
@@ -282,29 +230,61 @@ async function handleClearRelays(aq: ActiveQuery) {
 }
 
 async function handleGetRelays(aq: ActiveQuery) {
-  aq.respond(await (await getDht(aq)).relays);
+  aq.respond(await (await getSwarm(aq)).relays);
 }
-async function handleGetRelayServers(aq: ActiveQuery) {
-  aq.respond(await (await getDht(aq)).relayServers);
+
+async function handleJoinPeer(aq: ActiveQuery) {
+  const { topic = null } = aq.callerInput;
+
+  const swarm = await getSwarm(aq);
+
+  if (!topic) {
+    aq.reject("invalid topic");
+    return;
+  }
+  if (!b4a.isBuffer(topic)) {
+    aq.reject("topic must be a buffer");
+    return;
+  }
+
+  // @ts-ignore
+  swarm.join(topic);
+  aq.respond();
+}
+async function handleGetPeerByPubkey(aq: ActiveQuery) {
+  const { pubkey = null } = aq.callerInput;
+
+  const swarm = await getSwarm(aq);
+
+  if (!pubkey) {
+    aq.reject("invalid topic");
+    return;
+  }
+
+  if (!b4a.isBuffer(pubkey)) {
+    aq.reject("pubkey must be a buffer");
+    return;
+  }
+
+  // @ts-ignore
+  if (!swarm._allConnections.has(pubkey)) {
+    aq.reject("peer does not exist");
+    return;
+  }
+
+  // @ts-ignore
+  const peer = swarm._allConnections.get(pubkey);
+
+  aq.respond(
+    [...connections.entries()].filter((conn) => {
+      return conn[1].conn === peer;
+    })[0][0]
+  );
 }
 
 async function handleReady(aq: ActiveQuery) {
-  await (await getDht(aq)).ready();
+  const swarm = await getSwarm(aq);
+  // @ts-ignore
+  await swarm.ready();
   aq.respond();
-}
-
-function setDhtConnection(id: number, dht: number, conn: any) {
-  connections.set(id, { dht, conn });
-}
-
-function getDhtConnection(id: number) {
-  return connections.get(id);
-}
-
-function hasDhtConnection(id: number) {
-  return connections.has(id);
-}
-
-function deleteDhtConnection(id: number) {
-  connections.delete(id);
 }
