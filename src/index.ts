@@ -6,13 +6,14 @@ import { handlePresentSeed as handlePresentSeedModule } from "libkmodule/dist/se
 import type { Buffer } from "buffer";
 import * as ed from "@noble/ed25519";
 import b4a from "b4a";
+import { pubKeyToIpv6 } from "./addr.js";
 
-interface DhtConnection {
+interface SwarmConnection {
   swarm: number;
   conn: any;
 }
 
-const connections = new Map<number, DhtConnection>();
+const connections = new Map<number, SwarmConnection>();
 const swarmInstances = new Map<number, Hyperswarm>();
 
 let defaultSwarm: Hyperswarm;
@@ -37,27 +38,33 @@ const getSwarmId = idFactory();
 const getSocketId = idFactory();
 
 addHandler("presentSeed", handlePresentSeed);
-addHandler("joinPeer", handleJoinPeer);
+addHandler("join", handleJoin);
 addHandler("getPeerByPubkey", handleGetPeerByPubkey);
-addHandler("listenSocketEvent", handleListenSocketEvent, {
-  receiveUpdates: true,
-});
-addHandler("socketExists", handleSocketExists);
-addHandler("close", handleCloseSocketEvent);
-addHandler("socketWrite", handleWriteSocketEvent);
+
 addHandler("addRelay", handleAddRelay);
 addHandler("removeRelay", handleRemoveRelay);
 addHandler("clearRelays", handleClearRelays);
 addHandler("getRelays", handleGetRelays);
 addHandler("init", handleInit);
 addHandler("ready", handleReady);
+addHandler("listenConnections", handleListenConnections, {
+  receiveUpdates: true,
+});
+addHandler("socketGetInfo", handleGetSocketInfo);
 
+addHandler("socketExists", handleSocketExists);
+addHandler("socketListenEvent", handleSocketListenEvent, {
+  receiveUpdates: true,
+});
+addHandler("socketWrite", handleWriteSocketEvent);
+addHandler("socketClose", handleCloseSocketEvent);
 async function handlePresentSeed(aq: ActiveQuery) {
+  const pubkey = await ed.getPublicKey(aq.callerInput.rootKey);
   handlePresentSeedModule({
     callerInput: {
       seed: {
         publicKey: await ed.getPublicKey(aq.callerInput.rootKey),
-        secretKey: aq.callerInput.rootKey,
+        secretKey: b4a.concat([aq.callerInput.rootKey, pubkey]),
       },
     },
   } as ActiveQuery);
@@ -85,7 +92,7 @@ async function createSwarm(): Promise<number> {
   return id;
 }
 
-function handleListenSocketEvent(aq: ActiveQuery) {
+function handleSocketListenEvent(aq: ActiveQuery) {
   const { event = null } = aq.callerInput;
 
   const socket = validateConnection(aq);
@@ -119,13 +126,9 @@ function handleListenSocketEvent(aq: ActiveQuery) {
     respond();
   });
 
-  aq.setReceiveUpdate?.((data: any) => {
-    switch (data?.action) {
-      case "off":
-        socket.off(event, cb);
-        respond();
-        break;
-    }
+  aq.setReceiveUpdate?.(() => {
+    socket.off(event, cb);
+    respond();
   });
 }
 
@@ -234,7 +237,7 @@ async function handleGetRelays(aq: ActiveQuery) {
   aq.respond(await (await getSwarm(aq)).relays);
 }
 
-async function handleJoinPeer(aq: ActiveQuery) {
+async function handleJoin(aq: ActiveQuery) {
   const { topic = null } = aq.callerInput;
 
   const swarm = await getSwarm(aq);
@@ -249,7 +252,7 @@ async function handleJoinPeer(aq: ActiveQuery) {
   }
 
   // @ts-ignore
-  swarm.join(topic);
+  swarm.join(topic, { server: false });
   aq.respond();
 }
 async function handleGetPeerByPubkey(aq: ActiveQuery) {
@@ -276,11 +279,7 @@ async function handleGetPeerByPubkey(aq: ActiveQuery) {
   // @ts-ignore
   const peer = swarm._allConnections.get(pubkey);
 
-  aq.respond(
-    [...connections.entries()].filter((conn) => {
-      return conn[1].conn === peer;
-    })[0][0]
-  );
+  aq.respond(getSwarmToSocketConnectionId(peer));
 }
 
 async function handleInit(aq: ActiveQuery) {
@@ -304,4 +303,46 @@ async function handleReady(aq: ActiveQuery) {
   swarm.once("ready", () => {
     aq.respond();
   });
+}
+async function handleListenConnections(aq: ActiveQuery) {
+  const swarm = await getSwarm(aq);
+
+  const listener = (peer: any) => {
+    aq.sendUpdate(getSwarmToSocketConnectionId(peer));
+  };
+
+  swarm.on("connection", listener);
+
+  aq.setReceiveUpdate?.(() => {
+    swarm.off("connection", listener);
+    aq.respond();
+  });
+}
+
+async function handleGetSocketInfo(aq: ActiveQuery) {
+  const socket = validateConnection(aq);
+
+  if (!socket) {
+    return;
+  }
+
+  aq.respond({
+    remotePublicKey: socket.remotePublicKey,
+    publicKey: socket.publicKey,
+    rawStream: {
+      remoteHost: pubKeyToIpv6(socket.remotePublicKey),
+      remotePort: 0,
+      remoteFamily: "IPv6",
+    },
+  });
+}
+
+function getSwarmToSocketConnectionId(socket: any) {
+  for (const conn of connections) {
+    if (conn[1].conn === socket) {
+      return conn[0];
+    }
+  }
+
+  return false;
 }
