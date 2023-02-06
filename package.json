@@ -14,12 +14,12 @@
     "type": "module",
     "dependencies": {
         "@lumeweb/hyperswarm-web": "git+https://git.lumeweb.com/LumeWeb/hyperswarm-web.git",
-        "@noble/ed25519": "^1.7.1",
+        "@noble/ed25519": "^1.7.2",
         "b4a": "^1.6.1",
         "hyperswarm": "^4.3.7",
         "libkmodule": "^0.2.53",
         "libskynet": "^0.0.62",
-        "noise-handshake": "github:LumeWeb/noise-handshake",
+        "noise-handshake": "^3.0.2",
         "randombytes": "github:LumeWeb/randombytes-browser"
     },
     "devDependencies": {
@@ -27,7 +27,7 @@
         "@rollup/plugin-node-resolve": "^13.3.0",
         "@rollup/plugin-typescript": "^8.5.0",
         "@screamingvoid/sodium-universal": "^0.1.1",
-        "@scure/bip39": "^1.1.0",
+        "@scure/bip39": "^1.1.1",
         "@skynetlabs/skynet-nodejs": "^2.9.0",
         "@types/b4a": "^1.6.0",
         "@types/jest": "^28.1.8",
