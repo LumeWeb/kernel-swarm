@@ -318,7 +318,7 @@ async function handleListenConnections(aq: ActiveQuery) {
     aq.respond();
   });
 
-  swarm.activeRelay.dht.one("close", () => {
+  swarm.activeRelay.dht.once("close", () => {
     swarm.off("connection", listener);
     swarm.emit("close");
     aq.respond();
