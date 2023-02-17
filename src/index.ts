@@ -296,7 +296,7 @@ async function handleInit(aq: ActiveQuery) {
 async function handleReady(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
 
-  if (swarm.activeRelay) {
+  if (swarm.activeRelay && swarm.ready) {
     aq.respond();
     return;
   }
