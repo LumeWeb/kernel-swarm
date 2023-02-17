@@ -317,6 +317,12 @@ async function handleListenConnections(aq: ActiveQuery) {
     swarm.off("connection", listener);
     aq.respond();
   });
+
+  swarm.activeRelay.dht.one("close", () => {
+    swarm.off("connection", listener);
+    swarm.emit("close");
+    aq.respond();
+  });
 }
 
 async function handleGetSocketInfo(aq: ActiveQuery) {
