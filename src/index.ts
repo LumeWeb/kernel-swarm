@@ -310,7 +310,6 @@ async function handleListenConnections(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
 
   const listener = (peer: any) => {
-    debugger;
     aq.sendUpdate(getSwarmToSocketConnectionId(peer));
   };
 
