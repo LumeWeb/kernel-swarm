@@ -80,12 +80,14 @@ async function createSwarm(): Promise<number> {
   const id = getSwarmId();
   swarmInstances.set(id, swarmInstance);
 
-  swarmInstance.on("connection", (peer) => {
-    const socketId = getSocketId();
-    connections.set(socketId, { swarm: id, conn: peer });
+  swarmInstance.onSelf("init", () => {
+    swarmInstance.on("connection", (peer: any) => {
+      const socketId = getSocketId();
+      connections.set(socketId, { swarm: id, conn: peer });
 
-    peer.on("close", () => {
-      connections.delete(socketId);
+      peer.on("close", () => {
+        connections.delete(socketId);
+      });
     });
   });
 
@@ -308,6 +310,7 @@ async function handleListenConnections(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
 
   const listener = (peer: any) => {
+    debugger;
     aq.sendUpdate(getSwarmToSocketConnectionId(peer));
   };
 
