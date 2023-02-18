@@ -318,11 +318,21 @@ async function handleListenConnections(aq: ActiveQuery) {
     aq.respond();
   });
 
-  swarm.activeRelay.dht.once("close", () => {
+  const closeCb = () => {
     swarm.off("connection", listener);
     swarm.emit("close");
     aq.respond();
-  });
+  };
+
+  const hookClose = () => {
+    swarm.activeRelay.dht._protocol._stream.once("close", closeCb);
+  };
+
+  if (swarm.activeRelay) {
+    hookClose();
+    return;
+  }
+  swarm.once("ready", hookClose);
 }
 
 async function handleGetSocketInfo(aq: ActiveQuery) {
