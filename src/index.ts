@@ -123,7 +123,7 @@ function handleSocketListenEvent(aq: ActiveQuery) {
   };
 
   socket.on(event, cb);
-  socket.on("close", () => {
+  socket.once("close", () => {
     socket.off(event, cb);
     respond();
   });
