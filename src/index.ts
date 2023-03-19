@@ -8,6 +8,8 @@ import * as ed from "@noble/ed25519";
 import b4a from "b4a";
 import { pubKeyToIpv6 } from "./addr.js";
 
+const MAX_PEER_LISTENERS = 20;
+
 interface SwarmConnection {
   swarm: number;
   conn: any;
@@ -310,6 +312,7 @@ async function handleListenConnections(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
 
   const listener = (peer: any) => {
+    peer.setMaxListeners(MAX_PEER_LISTENERS);
     aq.sendUpdate(getSwarmToSocketConnectionId(peer));
   };
 
