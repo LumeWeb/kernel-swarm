@@ -15,7 +15,8 @@
     "dependencies": {
         "@lumeweb/hyperswarm-web": "git+https://git.lumeweb.com/LumeWeb/hyperswarm-web.git",
         "@noble/ed25519": "^1.7.3",
-        "b4a": "^1.6.2",
+        "b4a": "^1.6.3",
+        "eventemitter2": "^6.4.9",
         "hyperswarm": "^4.3.7",
         "libkmodule": "^0.2.53",
         "libskynet": "^0.0.62",

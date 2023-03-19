@@ -7,6 +7,8 @@ import type { Buffer } from "buffer";
 import * as ed from "@noble/ed25519";
 import b4a from "b4a";
 import { pubKeyToIpv6 } from "./addr.js";
+import { EventEmitter2 as EventEmitter } from "eventemitter2";
+import { logErr } from "libkmodule/dist";
 
 const MAX_PEER_LISTENERS = 20;
 
@@ -15,8 +17,14 @@ interface SwarmConnection {
   conn: any;
 }
 
+interface SwarmEvents {
+  swarm: number;
+  events: EventEmitter;
+}
+
 const connections = new Map<number, SwarmConnection>();
 const swarmInstances = new Map<number, Hyperswarm>();
+const swarmEvents = new Map<number, SwarmEvents>();
 
 let defaultSwarm: Hyperswarm;
 
@@ -83,14 +91,28 @@ async function createSwarm(): Promise<number> {
   swarmInstances.set(id, swarmInstance);
 
   swarmInstance.onSelf("init", () => {
+    const swarmInstanceEvents = new EventEmitter();
+    swarmInstanceEvents.setMaxListeners(MAX_PEER_LISTENERS);
+    swarmEvents.set(id, { swarm: id, events: swarmInstanceEvents });
     swarmInstance.on("connection", (peer: any) => {
       const socketId = getSocketId();
-      connections.set(socketId, { swarm: id, conn: peer });
+      connections.set(socketId, {
+        swarm: id,
+        conn: peer,
+      });
 
-      peer.on("close", () => {
+      peer.once("close", () => {
         connections.delete(socketId);
       });
+
+      swarmInstanceEvents.emit("connection", peer);
     });
+  });
+
+  swarmInstance.onSelf("close", (...args) => {
+    swarmEvents.get(id)?.events.emit("close", ...args);
+    swarmEvents.get(id)?.events.removeAllListeners();
+    swarmEvents.delete(id);
   });
 
   return id;
@@ -312,32 +334,39 @@ async function handleListenConnections(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
 
   const listener = (peer: any) => {
-    peer.setMaxListeners(MAX_PEER_LISTENERS);
     aq.sendUpdate(getSwarmToSocketConnectionId(peer));
   };
 
-  swarm.on("connection", listener);
+  const swarmEvent = swarmEvents.get(
+    getSwarmToSwarmId(swarm) as number
+  )?.events;
+
+  if (!swarmEvent) {
+    logErr("swarm event object is missing");
+  }
+
+  swarmEvent?.on("connection", listener);
 
   aq.setReceiveUpdate?.(() => {
-    swarm.off("connection", listener);
+    swarmEvent?.off("connection", listener);
     aq.respond();
   });
 
   const closeCb = () => {
-    swarm.off("connection", listener);
-    swarm.emit("close");
+    swarmEvent?.off("connection", listener);
+    swarmEvent?.emit("close");
     aq.respond();
   };
 
   const hookClose = () => {
-    swarm.activeRelay.dht._protocol._stream.once("close", closeCb);
+    swarm.onceSelf("close", closeCb);
   };
 
   if (swarm.activeRelay) {
     hookClose();
     return;
   }
-  swarm.once("ready", hookClose);
+  swarm.onceSelf("ready", hookClose);
 }
 
 async function handleGetSocketInfo(aq: ActiveQuery) {
@@ -362,6 +391,15 @@ function getSwarmToSocketConnectionId(socket: any) {
   for (const conn of connections) {
     if (conn[1].conn === socket) {
       return conn[0];
+    }
+  }
+
+  return false;
+}
+function getSwarmToSwarmId(swarm: any) {
+  for (const swarmInstance of swarmInstances) {
+    if (swarmInstance[1] === swarm) {
+      return swarmInstance[0];
     }
   }
 
