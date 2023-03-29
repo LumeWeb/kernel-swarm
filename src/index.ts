@@ -359,7 +359,7 @@ async function handleListenConnections(aq: ActiveQuery) {
   };
 
   const hookClose = () => {
-    swarm.onceSelf("close", closeCb);
+    swarmEvent?.once("close", closeCb);
   };
 
   if (swarm.activeRelay) {
