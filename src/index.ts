@@ -351,6 +351,12 @@ async function handleListenConnections(aq: ActiveQuery) {
     aq.respond();
   });
 
+  for (const conn of connections) {
+    if (conn[1].swarm === swarmId) {
+      listener(conn[1].conn);
+    }
+  }
+
   const closeCb = () => {
     swarmEvent?.off("connection", listener);
     swarmEvent?.emit("close");
@@ -366,12 +372,6 @@ async function handleListenConnections(aq: ActiveQuery) {
     return;
   }
   swarm.onceSelf("ready", hookClose);
-
-  for (const conn of connections) {
-    if (conn[1].swarm === swarmId) {
-      listener(conn[1].conn);
-    }
-  }
 }
 
 async function handleGetSocketInfo(aq: ActiveQuery) {
