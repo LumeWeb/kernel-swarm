@@ -332,14 +332,13 @@ async function handleReady(aq: ActiveQuery) {
 }
 async function handleListenConnections(aq: ActiveQuery) {
   const swarm = await getSwarm(aq);
+  const swarmId = getSwarmToSwarmId(swarm);
 
   const listener = (peer: any) => {
     aq.sendUpdate(getSwarmToSocketConnectionId(peer));
   };
 
-  const swarmEvent = swarmEvents.get(
-    getSwarmToSwarmId(swarm) as number
-  )?.events;
+  const swarmEvent = swarmEvents.get(swarmId as number)?.events;
 
   if (!swarmEvent) {
     logErr("swarm event object is missing");
@@ -367,6 +366,12 @@ async function handleListenConnections(aq: ActiveQuery) {
     return;
   }
   swarm.onceSelf("ready", hookClose);
+
+  for (const conn of connections) {
+    if (conn[1].swarm === swarmId) {
+      listener(conn[1].conn);
+    }
+  }
 }
 
 async function handleGetSocketInfo(aq: ActiveQuery) {
