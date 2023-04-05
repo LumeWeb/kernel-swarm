@@ -24,7 +24,7 @@
         "libkmodule": "^0.2.53",
         "libskynet": "^0.0.62",
         "noise-handshake": "^3.0.2",
-        "protomux": "^3.4.1",
+        "protomux": "git+https://git.lumeweb.com/LumeWeb/protomux.git",
         "randombytes": "github:LumeWeb/randombytes-browser"
     },
     "devDependencies": {
