@@ -14,14 +14,17 @@
     "type": "module",
     "dependencies": {
         "@lumeweb/hyperswarm-web": "git+https://git.lumeweb.com/LumeWeb/hyperswarm-web.git",
+        "@lumeweb/rpc": "git+https://git.lumeweb.com/LumeWeb/rpc.git",
         "@noble/ed25519": "^1.7.3",
         "@peculiar/webcrypto": "git+https://git.lumeweb.com/LumeWeb/webcrypto.git",
+        "async-mutex": "^0.4.0",
         "b4a": "^1.6.3",
         "eventemitter2": "^6.4.9",
         "hyperswarm": "^4.4.0",
         "libkmodule": "^0.2.53",
         "libskynet": "^0.0.62",
         "noise-handshake": "^3.0.2",
+        "protomux": "^3.4.1",
         "randombytes": "github:LumeWeb/randombytes-browser"
     },
     "devDependencies": {

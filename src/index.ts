@@ -9,6 +9,9 @@ import b4a from "b4a";
 import { pubKeyToIpv6 } from "./addr.js";
 import { EventEmitter2 as EventEmitter } from "eventemitter2";
 import { logErr } from "libkmodule/dist";
+// @ts-ignore
+import Protomux from "protomux";
+import { Mutex } from "async-mutex";
 
 const MAX_PEER_LISTENERS = 20;
 
@@ -68,6 +71,9 @@ addHandler("socketListenEvent", handleSocketListenEvent, {
 });
 addHandler("socketWrite", handleWriteSocketEvent);
 addHandler("socketClose", handleCloseSocketEvent);
+addHandler("syncProtomux", handleSyncProtomux, {
+  receiveUpdates: true,
+});
 async function handlePresentSeed(aq: ActiveQuery) {
   const pubkey = await ed.getPublicKey(aq.callerInput.rootKey);
   handlePresentSeedModule({
@@ -389,6 +395,69 @@ async function handleGetSocketInfo(aq: ActiveQuery) {
       remotePort: 0,
       remoteFamily: "IPv6",
     },
+  });
+}
+
+async function handleSyncProtomux(aq: ActiveQuery) {
+  const socket = validateConnection(aq);
+
+  if (!socket) {
+    return;
+  }
+
+  const mux = Protomux.from(socket);
+  const mutex: Mutex = mux.mutex ?? new Mutex();
+  if (!mux.mutex) {
+    mux.mutex = mutex;
+  }
+
+  socket.once("close", () => {
+    socket.off("syncProtomux", sync);
+    aq.respond();
+  });
+
+  const send = (mux: any) => {
+    aq.sendUpdate({
+      remote: Object.keys(mux._remote),
+      local: Object.keys(mux._local),
+      free: mux._free,
+    });
+  };
+
+  const sync = () => send(mux);
+
+  mux.syncState = send.bind(undefined, mux);
+
+  sync();
+
+  socket.on("syncProtomux", sync);
+
+  aq.setReceiveUpdate?.(async (data: any) => {
+    await mutex.acquire();
+
+    ["remote", "local"].forEach((field) => {
+      const rField = `_${field}`;
+      data[field].forEach((item: any) => {
+        if (!mux[rField][item]) {
+          while (item > mux[rField].length) {
+            mux[rField].push(null);
+          }
+        }
+        if (!mux[rField][item]) {
+          mux[rField][item] = null;
+        }
+      });
+    });
+
+    data.free.forEach((index: number) => {
+      if (mux._free[index] === null) {
+        mux._free[index] = undefined;
+      }
+    });
+    mux._free = mux._free.filter((item: any) => item !== undefined);
+    socket.emit("syncProtomux");
+
+    mutex.release();
   });
 }
 
