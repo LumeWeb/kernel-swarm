@@ -62,5 +62,10 @@
         "sodium-universal": "@screamingvoid/sodium-universal",
         "crypto": "crypto-browserify",
         "stream": "stream-browserify"
+    },
+    "pnpm": {
+        "overrides": {
+            "protomux": "git+https://git.lumeweb.com/LumeWeb/protomux.git"
+        }
     }
 }
