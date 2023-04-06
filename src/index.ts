@@ -150,7 +150,11 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     aq.respond();
   };
 
-  const cb = (data: Buffer) => {
+  const cb = async (data: Buffer) => {
+    await socket.mutex?.waitForUnlock();
+    if (responded) {
+      return;
+    }
     aq.sendUpdate(data);
   };
 
@@ -184,7 +188,7 @@ function handleCloseSocketEvent(aq: ActiveQuery) {
   aq.respond();
 }
 
-function handleWriteSocketEvent(aq: ActiveQuery) {
+async function handleWriteSocketEvent(aq: ActiveQuery) {
   const socket = validateConnection(aq);
 
   if (!socket) {
@@ -196,6 +200,8 @@ function handleWriteSocketEvent(aq: ActiveQuery) {
     aq.reject("empty message");
     return false;
   }
+
+  await socket.mutex?.waitForUnlock();
 
   socket.write(message);
 
