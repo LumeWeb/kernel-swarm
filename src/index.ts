@@ -12,6 +12,7 @@ import { logErr } from "libkmodule/dist";
 // @ts-ignore
 import Protomux from "protomux";
 import { Mutex } from "async-mutex";
+import defer from "p-defer";
 
 const MAX_PEER_LISTENERS = 20;
 
@@ -225,7 +226,14 @@ async function getSwarm(aq: ActiveQuery): Promise<Hyperswarm> {
   }
 
   if (!swarm) {
+    if (defaultSwarm.activeRelay && defaultSwarm.ready) {
+      await defaultSwarm.activeRelay.dht._protocol.opened;
+    }
     return defaultSwarm;
+  }
+
+  if (swarm.activeRelay && swarm.ready) {
+    await swarm.activeRelay.dht._protocol.opened;
   }
 
   return swarmInstances.get(swarm) as Hyperswarm;
@@ -330,9 +338,11 @@ async function handleReady(aq: ActiveQuery) {
 
   if (swarm.activeRelay && swarm.ready) {
     aq.respond();
+    await swarm.activeRelay.dht._protocol.opened;
     return;
   }
-  swarm.once("ready", () => {
+  swarm.once("ready", async () => {
+    await swarm.activeRelay.dht._protocol.opened;
     aq.respond();
   });
 }
@@ -426,9 +436,9 @@ async function handleSyncProtomux(aq: ActiveQuery) {
 
   const sync = () => send(mux);
 
-  mux.syncState = send.bind(undefined, mux);
-
-  sync();
+  if (!mux.syncState) {
+    mux.syncState = socket.emit.bind(socket, "syncProtomux");
+  }
 
   socket.on("syncProtomux", sync);
 
@@ -438,12 +448,13 @@ async function handleSyncProtomux(aq: ActiveQuery) {
     ["remote", "local"].forEach((field) => {
       const rField = `_${field}`;
       data[field].forEach((item: any) => {
-        if (!mux[rField][item]) {
+        item = parseInt(item);
+        if (typeof mux[rField][item] === "undefined") {
           while (item > mux[rField].length) {
             mux[rField].push(null);
           }
         }
-        if (!mux[rField][item]) {
+        if (typeof mux[rField][item] === "undefined") {
           mux[rField][item] = null;
         }
       });
