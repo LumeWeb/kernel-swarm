@@ -423,17 +423,6 @@ async function handleSyncProtomux(aq: ActiveQuery) {
     aq.reject("action required");
     return;
   }
-  if (!("data" in aq.callerInput)) {
-    aq.reject("data required");
-    return;
-  }
-
-  if (isNaN(parseInt(aq.callerInput))) {
-    aq.reject("data must be a number");
-    return;
-  }
-
-  debugger;
 
   const mux = Protomux.from(socket);
   let mutex: Mutex | null = null;
