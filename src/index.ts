@@ -433,6 +433,8 @@ async function handleSyncProtomux(aq: ActiveQuery) {
     return;
   }
 
+  debugger;
+
   const mux = Protomux.from(socket);
   let mutex: Mutex | null = null;
   if (mux.mutex) {
@@ -482,6 +484,8 @@ async function handleSyncProtomux(aq: ActiveQuery) {
   }
 
   aq.respond(ret);
+
+  mutex.release();
 }
 
 function getSwarmToSocketConnectionId(socket: any) {
