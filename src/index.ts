@@ -467,9 +467,7 @@ async function handleSyncProtomux(aq: ActiveQuery) {
     });
     mux._free = mux._free.filter((item: any) => item !== undefined);
     aq.sendUpdate(true);
-    socket.off("syncProtomux", sync);
     socket.emit("syncProtomux");
-    socket.on("syncProtomux", sync);
 
     mutex.release();
   });
