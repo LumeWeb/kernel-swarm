@@ -24,7 +24,8 @@
         "libkmodule": "^0.2.53",
         "libskynet": "^0.0.62",
         "noise-handshake": "^3.0.2",
-        "protomux": "git+https://git.lumeweb.com/LumeWeb/protomux.git",
+        "p-defer": "^4.0.0",
+        "protomux": "^3.4.1",
         "randombytes": "github:LumeWeb/randombytes-browser"
     },
     "devDependencies": {
@@ -62,10 +63,5 @@
         "sodium-universal": "@screamingvoid/sodium-universal",
         "crypto": "crypto-browserify",
         "stream": "stream-browserify"
-    },
-    "pnpm": {
-        "overrides": {
-            "protomux": "git+https://git.lumeweb.com/LumeWeb/protomux.git"
-        }
     }
 }
