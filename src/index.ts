@@ -445,7 +445,7 @@ async function createProtomuxChannel(aq: ActiveQuery) {
     }
     return (...args: any) => {
       args = args.filter(
-        (item: any) => item.constructor.name.toLowerCase() !== "channel"
+        (item: any) => item?.constructor.name.toLowerCase() !== "channel"
       );
 
       if (name === "destroy") {
