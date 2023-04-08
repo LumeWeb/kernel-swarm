@@ -464,14 +464,7 @@ async function createProtomuxChannel(aq: ActiveQuery) {
     };
   };
 
-  aq.setReceiveUpdate?.((data: any) => {
-    switch (data.action) {
-      case "open":
-        channel.open();
-    }
-  });
-
-  const channel = mux.createChannel({
+  let channel = mux.createChannel({
     protocol: data?.protocol,
     id: data?.id,
     handshake: data?.handshake,
@@ -484,6 +477,8 @@ async function createProtomuxChannel(aq: ActiveQuery) {
     aq.reject("duplicate channel");
     return;
   }
+
+  channel.open();
 
   const channelId = getChannelId();
 
