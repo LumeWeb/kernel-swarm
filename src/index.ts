@@ -556,9 +556,8 @@ async function createProtomuxMessage(aq: ActiveQuery) {
   };
 
   aq.setReceiveUpdate?.((data) => {
-    if (["send", "destroy"].includes(data.action)) {
-      message[data.action](...data.args);
-      return;
+    if (data.action === "send") {
+      message.send(...data.args);
     }
 
     defers[data.action]?.resolve(data.args);
