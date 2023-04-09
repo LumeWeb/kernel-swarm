@@ -530,9 +530,11 @@ async function createProtomuxMessage(aq: ActiveQuery) {
       });
 
       const ret = await defers[action]?.promise;
-
       if (ret[1]) {
-        args[0].buffer = Buffer.from(ret[1].buffer);
+        if (ret[1].buffer) {
+          args[0].buffer = b4a.from(ret[1].buffer);
+        }
+
         args[0].start = ret[1].start;
         args[0].end = ret[1].end;
       }
@@ -548,18 +550,34 @@ async function createProtomuxMessage(aq: ActiveQuery) {
         return update("encode", args);
       },
       async decode(...args: any) {
-        return update("encode", args);
+        return update("decode", args);
       },
     };
   };
 
   aq.setReceiveUpdate?.((data) => {
-    defers[data.action]?.resolve(data.args[0]);
+    if (data.action === "send") {
+      message.send(...data.args);
+    }
+
+    defers[data.action]?.resolve(data.args);
   });
+
+  if (data.onmessage) {
+    data.onmessage = (...args: any) => {
+      args = args.filter(
+        (item: any) => item?.constructor.name.toLowerCase() !== "channel"
+      );
+      aq.sendUpdate({
+        action: "onmessage",
+        args,
+      });
+    };
+  }
 
   const message = channel.addMessage({
     encoding: handleEncoding(data.encoding ?? false),
-    onmessage: data.encoding ?? undefined,
+    onmessage: data.onmessage ?? noop,
   });
 
   aq.sendUpdate({
@@ -586,3 +604,5 @@ function getSwarmToSwarmId(swarm: any) {
 
   return false;
 }
+
+function noop() {}
