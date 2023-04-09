@@ -52,6 +52,7 @@ function idFactory(start = 1) {
 const getSwarmId = idFactory();
 const getSocketId = idFactory();
 const getChannelId = idFactory();
+const getMessageId = idFactory();
 
 addHandler("presentSeed", handlePresentSeed);
 addHandler("join", handleJoin);
@@ -514,7 +515,7 @@ async function createProtomuxMessage(aq: ActiveQuery) {
 
   const data = aq.callerInput.data;
 
-  const defers: { [action: string]: DeferredPromise<any> } = {};
+  const defers = new Map<number, DeferredPromise<any>>();
 
   const handleEncoding = (enabled: boolean) => {
     if (!enabled) {
@@ -522,14 +523,16 @@ async function createProtomuxMessage(aq: ActiveQuery) {
     }
 
     const update = async (action: string, args: any) => {
-      await defers[action]?.promise;
-      defers[action] = defer();
+      const messageId = getMessageId();
+      const d = defer();
+      defers.set(messageId, d);
       aq.sendUpdate({
+        id: messageId,
         action,
         args,
       });
 
-      const ret = await defers[action]?.promise;
+      const ret = (await d.promise) as any;
       if (ret[1]) {
         if (ret[1].buffer) {
           args[0].buffer = b4a.from(ret[1].buffer);
@@ -560,7 +563,8 @@ async function createProtomuxMessage(aq: ActiveQuery) {
       message.send(...data.args);
     }
 
-    defers[data.action]?.resolve(data.args);
+    defers.get(data.id)?.resolve(data.args);
+    defers.delete(data.id);
   });
 
   if (data.onmessage) {
