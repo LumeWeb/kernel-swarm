@@ -81,6 +81,7 @@ addHandler("createProtomuxChannel", createProtomuxChannel, {
 addHandler("createProtomuxMessage", createProtomuxMessage, {
   receiveUpdates: true,
 });
+addHandler("createSwarm", handleCreateSwarm);
 
 async function handlePresentSeed(aq: ActiveQuery) {
   const pubkey = await ed.getPublicKey(aq.callerInput.rootKey);
@@ -587,6 +588,10 @@ async function createProtomuxMessage(aq: ActiveQuery) {
   aq.sendUpdate({
     action: "created",
   });
+}
+
+async function handleCreateSwarm(aq: ActiveQuery) {
+  aq.respond(await createSwarm());
 }
 
 function getSwarmToSocketConnectionId(socket: any) {
