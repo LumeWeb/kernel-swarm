@@ -75,10 +75,10 @@ addHandler("socketListenEvent", handleSocketListenEvent, {
 });
 addHandler("socketWrite", handleWriteSocketEvent);
 addHandler("socketClose", handleCloseSocketEvent);
-addHandler("createProtomuxChannel", createProtomuxChannel, {
+addHandler("createProtomuxChannel", handleCreateProtomuxChannel, {
   receiveUpdates: true,
 });
-addHandler("createProtomuxMessage", createProtomuxMessage, {
+addHandler("createProtomuxMessage", handleCreateProtomuxMessage, {
   receiveUpdates: true,
 });
 addHandler("createSwarm", handleCreateSwarm);
@@ -426,7 +426,7 @@ async function handleGetSocketInfo(aq: ActiveQuery) {
   });
 }
 
-async function createProtomuxChannel(aq: ActiveQuery) {
+async function handleCreateProtomuxChannel(aq: ActiveQuery) {
   const socket = validateConnection(aq);
 
   if (!socket) {
@@ -489,7 +489,7 @@ async function createProtomuxChannel(aq: ActiveQuery) {
   aq.sendUpdate(channelId);
 }
 
-async function createProtomuxMessage(aq: ActiveQuery) {
+async function handleCreateProtomuxMessage(aq: ActiveQuery) {
   const socket = validateConnection(aq);
 
   if (!socket) {
