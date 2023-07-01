@@ -47,9 +47,9 @@ function idFactory(start = 1) {
   let id = start;
 
   return function nextId() {
-    const nextId = id;
+    const _nextId = id;
     id += 1;
-    return nextId;
+    return _nextId;
   };
 }
 
