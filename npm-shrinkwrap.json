@@ -1,12 +1,14 @@
 {
     "name": "@lumeweb/kernel-swarm",
+    "version": "0.0.2-develop.2",
     "lockfileVersion": 3,
     "requires": true,
     "packages": {
         "": {
             "name": "@lumeweb/kernel-swarm",
+            "version": "0.0.2-develop.2",
             "dependencies": {
-                "@lumeweb/hyperswarm-web": "0.0.2-develop.4",
+                "@lumeweb/hyperswarm-web": "0.0.2-develop.5",
                 "@lumeweb/libkernel": "^0.1.0-develop.7",
                 "@lumeweb/rpc": "0.0.2-develop.1",
                 "@noble/curves": "^1.1.0",
@@ -23,8 +25,7 @@
                 "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.20",
                 "@types/b4a": "^1.6.0",
                 "presetter": "*"
-            },
-            "version": "0.0.2-develop.2"
+            }
         },
         "node_modules/@aashutoshrathi/word-wrap": {
             "version": "1.2.6",
@@ -2122,12 +2123,12 @@
             }
         },
         "node_modules/@lumeweb/hyperswarm-web": {
-            "version": "0.0.2-develop.4",
-            "resolved": "https://registry.npmjs.org/@lumeweb/hyperswarm-web/-/hyperswarm-web-0.0.2-develop.4.tgz",
-            "integrity": "sha512-TVwXL0ACv8uh9pawmR2UARaDG4th7LOvh2EX0A6KFVQQ4vNR1r0RSq9rraWKwN7QevSY1OrnyvKGFYuI21nwCA==",
+            "version": "0.0.2-develop.5",
+            "resolved": "https://registry.npmjs.org/@lumeweb/hyperswarm-web/-/hyperswarm-web-0.0.2-develop.5.tgz",
+            "integrity": "sha512-gY8Qwg9ZXll0IltgSPGXLlf0IDVNcvacgIu7NBDId9tejmz//16tyZOtrPpUO+QzkqPTTxTphPXAbbJnxjkthw==",
             "dependencies": {
                 "@hyperswarm/dht-relay": "^0.4.1",
-                "@lumeweb/kernel-peer-discovery-client": "^0.0.2-develop.3",
+                "@lumeweb/kernel-peer-discovery-client": "^0.0.2-develop.4",
                 "@lumeweb/libkernel": "0.1.0-develop.7",
                 "async-mutex": "^0.4.0",
                 "eventemitter2": "^6.4.9",
@@ -2136,9 +2137,9 @@
             }
         },
         "node_modules/@lumeweb/kernel-peer-discovery-client": {
-            "version": "0.0.2-develop.3",
-            "resolved": "https://registry.npmjs.org/@lumeweb/kernel-peer-discovery-client/-/kernel-peer-discovery-client-0.0.2-develop.3.tgz",
-            "integrity": "sha512-bv2H03jPUrNgu8h1MqsZOOzBth8HJLBtVsiQYyXhHRfi+HkhZO5EgrpnVTEiGGD+QuSkI8pjTypvAD6SEkj7sw==",
+            "version": "0.0.2-develop.4",
+            "resolved": "https://registry.npmjs.org/@lumeweb/kernel-peer-discovery-client/-/kernel-peer-discovery-client-0.0.2-develop.4.tgz",
+            "integrity": "sha512-EYz0+KUPLw032M3J50cGGRhxh+f2GCCd8WRtPJaYH8IRwwoNnHIOYf1YOlVC7DCJoUhRDBSzyQ41XQ8teNHGlQ==",
             "dependencies": {
                 "@hyperswarm/dht-relay": "^0.3.0",
                 "@lumeweb/libkernel": "0.1.0-develop.7",
@@ -21926,6 +21927,5 @@
                 "url": "https://github.com/sponsors/sindresorhus"
             }
         }
-    },
-    "version": "0.0.2-develop.2"
+    }
 }
