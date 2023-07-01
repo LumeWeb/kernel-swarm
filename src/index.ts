@@ -1,14 +1,18 @@
 // @ts-ignore
 import Hyperswarm from "@lumeweb/hyperswarm-web";
-import type { ActiveQuery } from "libkmodule";
-import { addHandler, getSeed, handleMessage } from "libkmodule";
-import { handlePresentSeed as handlePresentSeedModule } from "libkmodule/dist/seed.js";
+import type { ActiveQuery } from "@lumeweb/libkernel/module";
+import {
+  addHandler,
+  getKey,
+  handleMessage,
+  handlePresentKey as handlePresentKeyModule,
+} from "@lumeweb/libkernel/module";
 import { Buffer } from "buffer";
-import * as ed from "@noble/ed25519";
+import { ed25519 } from "@noble/curves/ed25519";
 import b4a from "b4a";
 import { pubKeyToIpv6 } from "./addr.js";
 import { EventEmitter2 as EventEmitter } from "eventemitter2";
-import { logErr } from "libkmodule/dist";
+import { logErr } from "@lumeweb/libkernel";
 // @ts-ignore
 import Protomux from "protomux";
 import defer, { DeferredPromise } from "p-defer";
@@ -54,7 +58,7 @@ const getSocketId = idFactory();
 const getChannelId = idFactory();
 const getMessageId = idFactory();
 
-addHandler("presentSeed", handlePresentSeed);
+addHandler("presentKey", handlePresentKey);
 addHandler("join", handleJoin);
 addHandler("getPeerByPubkey", handleGetPeerByPubkey);
 
@@ -83,12 +87,12 @@ addHandler("createProtomuxMessage", handleCreateProtomuxMessage, {
 });
 addHandler("createSwarm", handleCreateSwarm);
 
-async function handlePresentSeed(aq: ActiveQuery) {
-  const pubkey = await ed.getPublicKey(aq.callerInput.rootKey);
-  handlePresentSeedModule({
+async function handlePresentKey(aq: ActiveQuery) {
+  const pubkey = ed25519.getPublicKey(aq.callerInput.rootKey);
+  handlePresentKeyModule({
     callerInput: {
       seed: {
-        publicKey: await ed.getPublicKey(aq.callerInput.rootKey),
+        publicKey: ed25519.getPublicKey(aq.callerInput.rootKey),
         secretKey: b4a.concat([aq.callerInput.rootKey, pubkey]),
       },
     },
@@ -101,7 +105,13 @@ async function handlePresentSeed(aq: ActiveQuery) {
 }
 
 async function createSwarm(): Promise<number> {
-  const swarmInstance = new Hyperswarm({ keyPair: await getSeed() });
+  const privateKey = await getKey();
+  const swarmInstance = new Hyperswarm({
+    keyPair: {
+      publicKey: ed25519.getPublicKey(privateKey),
+      secretKey: privateKey,
+    },
+  });
   const id = getSwarmId();
   swarmInstances.set(id, swarmInstance);
 
@@ -206,7 +216,7 @@ async function handleWriteSocketEvent(aq: ActiveQuery) {
 
   if (!message) {
     aq.reject("empty message");
-    return false;
+    return;
   }
 
   await socket.mutex?.waitForUnlock();
@@ -447,7 +457,7 @@ async function handleCreateProtomuxChannel(aq: ActiveQuery) {
     }
     return (...args: any) => {
       args = args.filter(
-        (item: any) => item?.constructor.name.toLowerCase() !== "channel"
+        (item: any) => item?.constructor.name.toLowerCase() !== "channel",
       );
 
       if (name === "destroy") {
@@ -559,7 +569,7 @@ async function handleCreateProtomuxMessage(aq: ActiveQuery) {
     };
   };
 
-  aq.setReceiveUpdate?.((data) => {
+  aq.setReceiveUpdate?.((data: any) => {
     if (data.action === "send") {
       message.send(...data.args);
     }
@@ -571,7 +581,7 @@ async function handleCreateProtomuxMessage(aq: ActiveQuery) {
   if (data.onmessage) {
     data.onmessage = (...args: any) => {
       args = args.filter(
-        (item: any) => item?.constructor.name.toLowerCase() !== "channel"
+        (item: any) => item?.constructor.name.toLowerCase() !== "channel",
       );
       aq.sendUpdate({
         action: "onmessage",

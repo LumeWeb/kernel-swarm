@@ -22,7 +22,7 @@ export function pubKeyToIpv6(publicKey: Uint8Array) {
   addr[prefix.length] = ones;
   addr.set(nodeId, prefix.length + 1);
 
-  const result = [];
+  const result: string[] = [];
   for (let i = 0; i < 8; i++) {
     const num1 = addr[i * 2].toString(16).padStart(2, "0");
     const num2 = addr[i * 2 + 1].toString(16).padStart(2, "0");
@@ -46,7 +46,7 @@ function getLeadingOnes(buf: Uint8Array) {
 }
 
 function getTruncatedNodeID(buf: Uint8Array) {
-  const result = [];
+  const result: number[] = [];
   let done = false;
   let bits = 0;
   let nBits = 0;

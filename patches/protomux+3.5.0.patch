@@ -1,0 +1,45 @@
+diff --git a/node_modules/protomux/index.js b/node_modules/protomux/index.js
+index 07bf0ad..c8db59c 100644
+--- a/node_modules/protomux/index.js
++++ b/node_modules/protomux/index.js
+@@ -195,34 +195,34 @@ class Channel {
+       type,
+       encoding,
+       onmessage,
+-      recv (state, session) {
++      async recv (state, session) {
+         session._track(m.onmessage(encoding.decode(state), session))
+       }, 
+-      send (m, session = s) {
++      async send (m, session = s) {
+         if (session.closed === true) return false
+ 
+         const mux = session._mux
+         const state = { buffer: null, start: 0, end: typeLen }
+ 
+         if (mux._batch !== null) {
+-          encoding.preencode(state, m)
++          await encoding.preencode(state, m)
+           state.buffer = mux._alloc(state.end)
+ 
+           c.uint.encode(state, type)
+-          encoding.encode(state, m)
++          await encoding.encode(state, m)
+ 
+           mux._pushBatch(session._localId, state.buffer)
+           return true
+         }
+ 
+         c.uint.preencode(state, session._localId)
+-        encoding.preencode(state, m)
++        await encoding.preencode(state, m)
+ 
+         state.buffer = mux._alloc(state.end)
+ 
+         c.uint.encode(state, session._localId)
+         c.uint.encode(state, type)
+-        encoding.encode(state, m)
++        await encoding.encode(state, m)
+ 
+         mux.drained = mux.stream.write(state.buffer)
+ 
