@@ -23,7 +23,8 @@
                 "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.20",
                 "@types/b4a": "^1.6.0",
                 "presetter": "*"
-            }
+            },
+            "version": "0.0.2-develop.1"
         },
         "node_modules/@aashutoshrathi/word-wrap": {
             "version": "1.2.6",
@@ -21925,5 +21926,6 @@
                 "url": "https://github.com/sponsors/sindresorhus"
             }
         }
-    }
+    },
+    "version": "0.0.2-develop.1"
 }

@@ -33,7 +33,6 @@
         "@types/b4a": "^1.6.0",
         "presetter": "*"
     },
-    "version": "",
-    "readme": "ERROR: No README data found!",
-    "_id": "@lumeweb/kernel-swarm@"
+    "version": "0.0.2-develop.1",
+    "readme": "ERROR: No README data found!"
 }
