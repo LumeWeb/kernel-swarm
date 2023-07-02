@@ -11,7 +11,8 @@
     "scripts": {
         "prepare": "presetter bootstrap",
         "build": "run build",
-        "semantic-release": "semantic-release"
+        "semantic-release": "semantic-release",
+        "postinstall": "patch-package"
     },
     "type": "module",
     "dependencies": {

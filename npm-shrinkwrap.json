@@ -7,6 +7,7 @@
         "": {
             "name": "@lumeweb/kernel-swarm",
             "version": "0.0.2-develop.2",
+            "hasInstallScript": true,
             "dependencies": {
                 "@lumeweb/hyperswarm-web": "0.0.2-develop.5",
                 "@lumeweb/libkernel": "^0.1.0-develop.12",
