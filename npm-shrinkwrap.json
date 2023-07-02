@@ -22,7 +22,7 @@
                 "protomux": "^3.5.0"
             },
             "devDependencies": {
-                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.27",
+                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.28",
                 "@types/b4a": "^1.6.0",
                 "presetter": "*"
             }
@@ -2302,19 +2302,19 @@
             }
         },
         "node_modules/@lumeweb/presetter-kernel-module-preset": {
-            "version": "0.1.0-develop.27",
-            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.27.tgz",
-            "integrity": "sha512-zqYcJtA32/QUZQvu4GuA0cprQdKSFHGnrYM0HCuAKSx+ULznnwdyb4K43CCPzSSlCQXpwBs7i0XA8kGAd9V/lQ==",
+            "version": "0.1.0-develop.28",
+            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.28.tgz",
+            "integrity": "sha512-P9fqFaoZs/hIDPBMiVVMCbtXxPXDzehPucS6wWmU25k0w3AdAmBT5+OHrC+4jk+Dnl8hErrlI9HtXQ3XuSpGTg==",
             "dev": true,
             "dependencies": {
                 "@lumeweb/node-library-preset": "0.2.7",
-                "@lumeweb/presetter-preset-rollup": "4.1.0-develop.4"
+                "@lumeweb/presetter-preset-rollup": "4.1.0-develop.5"
             }
         },
         "node_modules/@lumeweb/presetter-preset-rollup": {
-            "version": "4.1.0-develop.4",
-            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-preset-rollup/-/presetter-preset-rollup-4.1.0-develop.4.tgz",
-            "integrity": "sha512-XrnmruUMKlTx7Gee07WjWEdG+CSEbho1ERHupMPXZMvtrvXaqIpLLF/yrLOqVBdwnfTLG1FB+pZdhSJZo36eCw==",
+            "version": "4.1.0-develop.5",
+            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-preset-rollup/-/presetter-preset-rollup-4.1.0-develop.5.tgz",
+            "integrity": "sha512-fMu4ZzPnmbnJMp44+4zpCZXsTp2GBemekKDeQC100BUegO1+SISeKXLhvzYXU7bYJWQdqbc1p99myR9VZWTiPQ==",
             "dev": true,
             "dependencies": {
                 "@rollup/plugin-commonjs": "^25.0.0",
@@ -2326,6 +2326,7 @@
                 "@rollup/plugin-yaml": "^4.0.0",
                 "presetter-preset-strict": "^4.0.1",
                 "presetter-types": "^4.0.1",
+                "rollup": "^3.0.0",
                 "rollup-plugin-postcss": "^4.0.0",
                 "rollup-plugin-visualizer": "^5.0.0",
                 "type-fest": "^3.12.0"
@@ -8054,7 +8055,6 @@
             "os": [
                 "darwin"
             ],
-            "peer": true,
             "engines": {
                 "node": "^8.16.0 || ^10.6.0 || >=11.0.0"
             }
@@ -18676,6 +18676,22 @@
             },
             "funding": {
                 "url": "https://github.com/sponsors/isaacs"
+            }
+        },
+        "node_modules/rollup": {
+            "version": "3.26.0",
+            "resolved": "https://registry.npmjs.org/rollup/-/rollup-3.26.0.tgz",
+            "integrity": "sha512-YzJH0eunH2hr3knvF3i6IkLO/jTjAEwU4HoMUbQl4//Tnl3ou0e7P5SjxdDr8HQJdeUJShlbEHXrrnEHy1l7Yg==",
+            "dev": true,
+            "bin": {
+                "rollup": "dist/bin/rollup"
+            },
+            "engines": {
+                "node": ">=14.18.0",
+                "npm": ">=8.0.0"
+            },
+            "optionalDependencies": {
+                "fsevents": "~2.3.2"
             }
         },
         "node_modules/rollup-plugin-postcss": {
