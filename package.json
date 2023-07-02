@@ -29,7 +29,7 @@
         "protomux": "^3.5.0"
     },
     "devDependencies": {
-        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.26",
+        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.27",
         "@types/b4a": "^1.6.0",
         "presetter": "*"
     },
