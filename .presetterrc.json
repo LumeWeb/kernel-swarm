@@ -3,6 +3,7 @@
     "@lumeweb/presetter-kernel-module-preset"
   ],
     "config": {
-        "official": true
+        "official": true,
+        "browser": true
     }
 }
