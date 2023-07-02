@@ -9,7 +9,7 @@
             "version": "0.0.2-develop.2",
             "dependencies": {
                 "@lumeweb/hyperswarm-web": "0.0.2-develop.5",
-                "@lumeweb/libkernel": "^0.1.0-develop.7",
+                "@lumeweb/libkernel": "^0.1.0-develop.12",
                 "@lumeweb/rpc": "0.0.2-develop.1",
                 "@noble/curves": "^1.1.0",
                 "@peculiar/webcrypto": "^1.4.3",
@@ -22,7 +22,7 @@
                 "protomux": "^3.5.0"
             },
             "devDependencies": {
-                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.20",
+                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.26",
                 "@types/b4a": "^1.6.0",
                 "presetter": "*"
             }
@@ -2136,6 +2136,27 @@
                 "random-number-csprng": "^1.0.2"
             }
         },
+        "node_modules/@lumeweb/hyperswarm-web/node_modules/@lumeweb/libkernel": {
+            "version": "0.1.0-develop.7",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libkernel/-/libkernel-0.1.0-develop.7.tgz",
+            "integrity": "sha512-X2x9KYpvpMIWhURiPpEQUYOXPh96UGlwuFTny2NutbaUZr14qSQTBCB9C3rTngqVQVYrSW+q4rtAlf1GZ8eGeA==",
+            "dependencies": {
+                "@lumeweb/libweb": "0.2.0-develop.20",
+                "eventemitter2": "^6.4.9"
+            }
+        },
+        "node_modules/@lumeweb/hyperswarm-web/node_modules/@lumeweb/libweb": {
+            "version": "0.2.0-develop.20",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libweb/-/libweb-0.2.0-develop.20.tgz",
+            "integrity": "sha512-oi6kx8QUY6sPQqwh+WvuLPbvzSQhL3QHIerSyFcvn/kPHt3sjF00atTm0uc5BLXMLn3kpZ4nmUnOylk2anhAmQ==",
+            "dependencies": {
+                "@lumeweb/community-portals": "^0.1.0-develop.6",
+                "@lumeweb/libportal": "^0.2.0-develop.10",
+                "@lumeweb/node-library-preset": "git+https://git.lumeweb.com/LumeWeb/node-library-preset.git",
+                "@noble/curves": "^1.1.0",
+                "@noble/hashes": "^1.3.1"
+            }
+        },
         "node_modules/@lumeweb/kernel-peer-discovery-client": {
             "version": "0.0.2-develop.4",
             "resolved": "https://registry.npmjs.org/@lumeweb/kernel-peer-discovery-client/-/kernel-peer-discovery-client-0.0.2-develop.4.tgz",
@@ -2165,6 +2186,27 @@
                 "timeout-refresh": "^2.0.1"
             }
         },
+        "node_modules/@lumeweb/kernel-peer-discovery-client/node_modules/@lumeweb/libkernel": {
+            "version": "0.1.0-develop.7",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libkernel/-/libkernel-0.1.0-develop.7.tgz",
+            "integrity": "sha512-X2x9KYpvpMIWhURiPpEQUYOXPh96UGlwuFTny2NutbaUZr14qSQTBCB9C3rTngqVQVYrSW+q4rtAlf1GZ8eGeA==",
+            "dependencies": {
+                "@lumeweb/libweb": "0.2.0-develop.20",
+                "eventemitter2": "^6.4.9"
+            }
+        },
+        "node_modules/@lumeweb/kernel-peer-discovery-client/node_modules/@lumeweb/libweb": {
+            "version": "0.2.0-develop.20",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libweb/-/libweb-0.2.0-develop.20.tgz",
+            "integrity": "sha512-oi6kx8QUY6sPQqwh+WvuLPbvzSQhL3QHIerSyFcvn/kPHt3sjF00atTm0uc5BLXMLn3kpZ4nmUnOylk2anhAmQ==",
+            "dependencies": {
+                "@lumeweb/community-portals": "^0.1.0-develop.6",
+                "@lumeweb/libportal": "^0.2.0-develop.10",
+                "@lumeweb/node-library-preset": "git+https://git.lumeweb.com/LumeWeb/node-library-preset.git",
+                "@noble/curves": "^1.1.0",
+                "@noble/hashes": "^1.3.1"
+            }
+        },
         "node_modules/@lumeweb/kernel-peer-discovery-client/node_modules/sodium-native": {
             "version": "3.4.1",
             "resolved": "https://registry.npmjs.org/sodium-native/-/sodium-native-3.4.1.tgz",
@@ -2192,12 +2234,23 @@
             }
         },
         "node_modules/@lumeweb/libkernel": {
-            "version": "0.1.0-develop.7",
-            "resolved": "https://registry.npmjs.org/@lumeweb/libkernel/-/libkernel-0.1.0-develop.7.tgz",
-            "integrity": "sha512-X2x9KYpvpMIWhURiPpEQUYOXPh96UGlwuFTny2NutbaUZr14qSQTBCB9C3rTngqVQVYrSW+q4rtAlf1GZ8eGeA==",
+            "version": "0.1.0-develop.12",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libkernel/-/libkernel-0.1.0-develop.12.tgz",
+            "integrity": "sha512-bcMEyuM3pk7z7mDSiuAR5s4Xl61j4Tvb6GTy+IjN4rGsa7tziKpwPsH+nKYJrWcmrv3uYfgRxF+fSf3wttCzWw==",
             "dependencies": {
-                "@lumeweb/libweb": "0.2.0-develop.20",
-                "eventemitter2": "^6.4.9"
+                "@lumeweb/libweb": "0.2.0-develop.21",
+                "emittery": "^1.0.1"
+            }
+        },
+        "node_modules/@lumeweb/libkernel/node_modules/emittery": {
+            "version": "1.0.1",
+            "resolved": "https://registry.npmjs.org/emittery/-/emittery-1.0.1.tgz",
+            "integrity": "sha512-2ID6FdrMD9KDLldGesP6317G78K7km/kMcwItRtVFva7I/cSEOIaLpewaUb+YLXVwdAp3Ctfxh/V5zIl1sj7dQ==",
+            "engines": {
+                "node": ">=14.16"
+            },
+            "funding": {
+                "url": "https://github.com/sindresorhus/emittery?sponsor=1"
             }
         },
         "node_modules/@lumeweb/libpeerdiscovery": {
@@ -2226,12 +2279,12 @@
             }
         },
         "node_modules/@lumeweb/libweb": {
-            "version": "0.2.0-develop.20",
-            "resolved": "https://registry.npmjs.org/@lumeweb/libweb/-/libweb-0.2.0-develop.20.tgz",
-            "integrity": "sha512-oi6kx8QUY6sPQqwh+WvuLPbvzSQhL3QHIerSyFcvn/kPHt3sjF00atTm0uc5BLXMLn3kpZ4nmUnOylk2anhAmQ==",
+            "version": "0.2.0-develop.21",
+            "resolved": "https://registry.npmjs.org/@lumeweb/libweb/-/libweb-0.2.0-develop.21.tgz",
+            "integrity": "sha512-YJLSGPq1TdRzjX1/e+65PJQ5Kzizk+ADskEMesCdONJR5vctP5pRdc16Cpl1bAETsPX2wpBtWCmbI2Rt3mna3A==",
             "dependencies": {
                 "@lumeweb/community-portals": "^0.1.0-develop.6",
-                "@lumeweb/libportal": "^0.2.0-develop.10",
+                "@lumeweb/libportal": "^0.2.0-develop.11",
                 "@lumeweb/node-library-preset": "git+https://git.lumeweb.com/LumeWeb/node-library-preset.git",
                 "@noble/curves": "^1.1.0",
                 "@noble/hashes": "^1.3.1"
@@ -2250,23 +2303,23 @@
             }
         },
         "node_modules/@lumeweb/presetter-kernel-module-preset": {
-            "version": "0.1.0-develop.20",
-            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.20.tgz",
-            "integrity": "sha512-c4i2c70XvQN3cCQ2fqj67U1yTtPZOUUOTi6zGI6XXSBX8a/iyviUvGmJXsEU5HvRI+GiYljZi4KAhOuUnCei3g==",
+            "version": "0.1.0-develop.26",
+            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.26.tgz",
+            "integrity": "sha512-n5JZSbfTlnYW6MF2js8UMsBJK3ULi6Zqn3KZsamGlZTR0lnmiL791mes7KgUCW0P+hXjipmyMA1Z06ky/s9MaA==",
             "dev": true,
             "dependencies": {
                 "@lumeweb/node-library-preset": "0.2.7",
-                "@lumeweb/presetter-preset-rollup": "^4.0.2-develop.9",
-                "@rollup/plugin-typescript": "^11.1.2",
-                "@rollup/plugin-wasm": "^6.1.3"
+                "@lumeweb/presetter-preset-rollup": "4.1.0-develop.3",
+                "@rollup/plugin-typescript": "^11.1.2"
             }
         },
         "node_modules/@lumeweb/presetter-preset-rollup": {
-            "version": "4.0.2-develop.9",
-            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-preset-rollup/-/presetter-preset-rollup-4.0.2-develop.9.tgz",
-            "integrity": "sha512-05uqNb4ntLmAwo2CK/Ms8GYZauMn28yWgFIyqjNXy0VBxx17W/HT5zirxIhyOzwFW9uLeYhUrS9ZnwfmjlmKjA==",
+            "version": "4.1.0-develop.3",
+            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-preset-rollup/-/presetter-preset-rollup-4.1.0-develop.3.tgz",
+            "integrity": "sha512-2tXCVGmJJYWVrtFogop8rRibXFWnEd8IDJ07ueu1LOHt6J6hh6BKzNUOBA3ZDQxolLADayAI7wHl3XiVksWVzw==",
             "dev": true,
             "dependencies": {
+                "presetter-preset-strict": "^4.0.1",
                 "presetter-types": "^4.0.1",
                 "type-fest": "^3.12.0"
             },
@@ -3052,23 +3105,6 @@
                     "optional": true
                 },
                 "tslib": {
-                    "optional": true
-                }
-            }
-        },
-        "node_modules/@rollup/plugin-wasm": {
-            "version": "6.1.3",
-            "resolved": "https://registry.npmjs.org/@rollup/plugin-wasm/-/plugin-wasm-6.1.3.tgz",
-            "integrity": "sha512-7ItTTeyauE6lwdDtQWceEHZ9+txbi4RRy0mYPFn9BW7rD7YdgBDu7HTHsLtHrRzJc313RM/1m6GKgV3np/aEaw==",
-            "dev": true,
-            "engines": {
-                "node": ">=14.0.0"
-            },
-            "peerDependencies": {
-                "rollup": "^1.20.0||^2.0.0||^3.0.0"
-            },
-            "peerDependenciesMeta": {
-                "rollup": {
                     "optional": true
                 }
             }

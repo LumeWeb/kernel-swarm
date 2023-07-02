@@ -16,7 +16,7 @@
     "type": "module",
     "dependencies": {
         "@lumeweb/hyperswarm-web": "0.0.2-develop.5",
-        "@lumeweb/libkernel": "^0.1.0-develop.7",
+        "@lumeweb/libkernel": "^0.1.0-develop.12",
         "@lumeweb/rpc": "0.0.2-develop.1",
         "@noble/curves": "^1.1.0",
         "@peculiar/webcrypto": "^1.4.3",
@@ -29,7 +29,7 @@
         "protomux": "^3.5.0"
     },
     "devDependencies": {
-        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.20",
+        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.26",
         "@types/b4a": "^1.6.0",
         "presetter": "*"
     },
