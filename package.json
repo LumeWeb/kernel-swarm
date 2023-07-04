@@ -10,7 +10,7 @@
     },
     "scripts": {
         "prepare": "presetter bootstrap",
-        "build": "run build",
+        "build": "shx touch nop.js; run build",
         "semantic-release": "semantic-release",
         "postinstall": "patch-package"
     },
@@ -33,13 +33,9 @@
         "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.29",
         "@rollup/plugin-alias": "^5.0.0",
         "@types/b4a": "^1.6.0",
+        "crypto-browserify": "^3.12.0",
         "presetter": "*"
     },
     "version": "0.0.2-develop.2",
-    "readme": "ERROR: No README data found!",
-    "browser": {
-        "node-fetch": false,
-        "stream": false,
-        "formdata-polyfill": false
-    }
+    "readme": "ERROR: No README data found!"
 }
