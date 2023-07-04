@@ -6,13 +6,13 @@ import {
   getKey,
   handleMessage,
   handlePresentKey as handlePresentKeyModule,
+  logErr,
 } from "@lumeweb/libkernel/module";
 import { Buffer } from "buffer";
 import { ed25519 } from "@noble/curves/ed25519";
 import b4a from "b4a";
 import { pubKeyToIpv6 } from "./addr.js";
 import { EventEmitter2 as EventEmitter } from "eventemitter2";
-import { logErr } from "@lumeweb/libkernel";
 // @ts-ignore
 import Protomux from "protomux";
 import defer, { DeferredPromise } from "p-defer";
@@ -88,13 +88,9 @@ addHandler("createProtomuxMessage", handleCreateProtomuxMessage, {
 addHandler("createSwarm", handleCreateSwarm);
 
 async function handlePresentKey(aq: ActiveQuery) {
-  const pubkey = ed25519.getPublicKey(aq.callerInput.rootKey);
   handlePresentKeyModule({
     callerInput: {
-      seed: {
-        publicKey: ed25519.getPublicKey(aq.callerInput.rootKey),
-        secretKey: b4a.concat([aq.callerInput.rootKey, pubkey]),
-      },
+      key: aq.callerInput.rootKey,
     },
   } as ActiveQuery);
 
