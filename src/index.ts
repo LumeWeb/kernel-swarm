@@ -576,10 +576,17 @@ async function handleCreateProtomuxMessage(aq: ActiveQuery) {
   });
 
   if (data.onmessage) {
-    data.onmessage = (...args: any) => {
+    data.onmessage = async (...args: any) => {
+      for (let i = 0; i < args.length; i++) {
+        if (isPromise(args[i])) {
+          args[i] = await args[i];
+        }
+      }
+
       args = args.filter(
         (item: any) => item?.constructor.name.toLowerCase() !== "channel",
       );
+
       aq.sendUpdate({
         action: "onmessage",
         args,
@@ -622,3 +629,11 @@ function getSwarmToSwarmId(swarm: any) {
 }
 
 function noop() {}
+
+function isPromise(obj: Promise<any>) {
+  return (
+    !!obj &&
+    (typeof obj === "object" || typeof obj === "function") &&
+    typeof obj.then === "function"
+  );
+}
