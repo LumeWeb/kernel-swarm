@@ -21,6 +21,7 @@
         "@lumeweb/rpc": "0.0.2-develop.1",
         "@noble/curves": "^1.1.0",
         "@peculiar/webcrypto": "^1.4.3",
+        "@screamingvoid/sodium-universal": "^0.1.1",
         "async-mutex": "^0.4.0",
         "b4a": "^1.6.4",
         "eventemitter2": "^6.4.9",
@@ -34,6 +35,7 @@
         "@rollup/plugin-alias": "^5.0.0",
         "@types/b4a": "^1.6.0",
         "crypto-browserify": "^3.12.0",
+        "patch-package": "^7.0.0",
         "presetter": "*"
     },
     "version": "0.0.2-develop.3",

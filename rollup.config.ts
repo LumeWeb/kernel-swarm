@@ -28,7 +28,8 @@ export default {
     import0.default(...([] as const)),
     import9.default({
       entries: {
-        crypto: "crypto-browserify",
+        "crypto": "crypto-browserify",
+        "sodium-universal": "@screamingvoid/sodium-universal",
       },
       customResolver,
     }),
