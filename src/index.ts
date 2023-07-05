@@ -16,6 +16,7 @@ import { EventEmitter2 as EventEmitter } from "eventemitter2";
 // @ts-ignore
 import Protomux from "protomux";
 import defer, { DeferredPromise } from "p-defer";
+import { concatBytes } from "@lumeweb/libkernel";
 
 const MAX_PEER_LISTENERS = 20;
 
@@ -105,7 +106,7 @@ async function createSwarm(): Promise<number> {
   const swarmInstance = new Hyperswarm({
     keyPair: {
       publicKey: ed25519.getPublicKey(privateKey),
-      secretKey: privateKey,
+      secretKey: concatBytes(privateKey, ed25519.getPublicKey(privateKey)),
     },
   });
   const id = getSwarmId();
