@@ -1,3 +1,10 @@
+## [0.0.2-develop.6](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.5...v0.0.2-develop.6) (2023-07-08)
+
+
+### Bug Fixes
+
+* need to patch our own sdk for bundling so we don't need to put the hack in directly ([10170bd](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/10170bd673ccd4070c2ab9e0b444cba81080311d))
+
 ## [0.0.2-develop.5](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.4...v0.0.2-develop.5) (2023-07-05)
 
 
