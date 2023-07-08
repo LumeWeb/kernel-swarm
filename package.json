@@ -31,7 +31,7 @@
         "protomux": "^3.5.0"
     },
     "devDependencies": {
-        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.38",
+        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.39",
         "@rollup/plugin-alias": "^5.0.0",
         "@types/b4a": "^1.6.0",
         "crypto-browserify": "^3.12.0",
@@ -39,5 +39,8 @@
         "presetter": "*"
     },
     "version": "0.0.2-develop.5",
-    "readme": "ERROR: No README data found!"
+    "readme": "ERROR: No README data found!",
+    "overrides": {
+        "buffer": "^6.0.3"
+    }
 }
