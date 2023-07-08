@@ -1,0 +1,13 @@
+diff --git a/node_modules/@lumeweb/libportal/lib/wasm.mjs b/node_modules/@lumeweb/libportal/lib/wasm.mjs
+index 32726cf..6fdc525 100644
+--- a/node_modules/@lumeweb/libportal/lib/wasm.mjs
++++ b/node_modules/@lumeweb/libportal/lib/wasm.mjs
+@@ -6,7 +6,7 @@ export default async function (imports) {
+         const wasm = await fs.readFile(wasmPath);
+         return (await WebAssembly.instantiate(wasm, imports)).instance;
+     }
+-    let wasm = await import("./wasm/bao.wasm");
++    let wasm = await import("./wasm/bao.wasm?init");
+     wasm = wasm.default || wasm;
+     return (await wasm(imports)).instance;
+ }
