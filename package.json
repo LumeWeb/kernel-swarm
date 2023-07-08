@@ -10,14 +10,14 @@
     },
     "scripts": {
         "prepare": "presetter bootstrap",
-        "build": "shx touch nop.js; run build",
+        "build": "run build",
         "semantic-release": "semantic-release",
         "postinstall": "patch-package"
     },
     "type": "module",
     "dependencies": {
         "@lumeweb/hyperswarm-web": "0.0.2-develop.7",
-        "@lumeweb/libkernel": "^0.1.0-develop.13",
+        "@lumeweb/libkernel": "^0.1.0-develop.14",
         "@lumeweb/rpc": "0.0.2-develop.1",
         "@noble/curves": "^1.1.0",
         "@peculiar/webcrypto": "^1.4.3",
@@ -31,7 +31,7 @@
         "protomux": "^3.5.0"
     },
     "devDependencies": {
-        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.29",
+        "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.38",
         "@rollup/plugin-alias": "^5.0.0",
         "@types/b4a": "^1.6.0",
         "crypto-browserify": "^3.12.0",
