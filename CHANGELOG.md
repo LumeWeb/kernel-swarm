@@ -1,3 +1,10 @@
+## [0.0.2-develop.5](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.4...v0.0.2-develop.5) (2023-07-05)
+
+
+### Bug Fixes
+
+* need to loop over all protomux message args and await any promises ([3a4cfd4](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/3a4cfd45a6515fac5a4205d0c2503864efbd33bf))
+
 ## [0.0.2-develop.4](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.3...v0.0.2-develop.4) (2023-07-05)
 
 
