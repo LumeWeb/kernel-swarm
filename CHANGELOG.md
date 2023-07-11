@@ -1,3 +1,10 @@
+## [0.0.2-develop.7](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.6...v0.0.2-develop.7) (2023-07-08)
+
+
+### Bug Fixes
+
+* pin buffer version ([928cff2](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/928cff2a083e5282d15882b6be05ab42d6e2cab2))
+
 ## [0.0.2-develop.6](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.5...v0.0.2-develop.6) (2023-07-08)
 
 
