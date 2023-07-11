@@ -24,7 +24,7 @@
                 "protomux": "^3.5.0"
             },
             "devDependencies": {
-                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.39",
+                "@lumeweb/presetter-kernel-module-preset": "^0.1.0-develop.41",
                 "@rollup/plugin-alias": "^5.0.0",
                 "@types/b4a": "^1.6.0",
                 "crypto-browserify": "^3.12.0",
@@ -4046,9 +4046,9 @@
             }
         },
         "node_modules/@lumeweb/presetter-kernel-module-preset": {
-            "version": "0.1.0-develop.39",
-            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.39.tgz",
-            "integrity": "sha512-NLFZbpYZXHnUVfA3SdwZsEmnlXuA//K8KeW2d+zlmeYW36l+4z9frmykKmy5lVMOGilWVKOvEBrSJqp1YkB/Cw==",
+            "version": "0.1.0-develop.41",
+            "resolved": "https://registry.npmjs.org/@lumeweb/presetter-kernel-module-preset/-/presetter-kernel-module-preset-0.1.0-develop.41.tgz",
+            "integrity": "sha512-1LeRMV8KODkpoOa/jb0KnXnFQy2v1z9F3ZXTDI7qHzmOZxBUpylu+fP6yYcOB1tcxKexz5JzKffK65lueF2Sfg==",
             "dev": true,
             "dependencies": {
                 "@lumeweb/node-library-preset": "0.2.7",
