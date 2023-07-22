@@ -79,6 +79,7 @@ addHandler("socketExists", handleSocketExists);
 addHandler("socketListenEvent", handleSocketListenEvent, {
   receiveUpdates: true,
 });
+addHandler("socketListeners", handleSocketListenersEvent);
 addHandler("socketWrite", handleWriteSocketEvent);
 addHandler("socketClose", handleCloseSocketEvent);
 addHandler("createProtomuxChannel", handleCreateProtomuxChannel, {
@@ -189,6 +190,18 @@ function handleSocketListenEvent(aq: ActiveQuery) {
   });
 
   conn.listeners.add(aq.domain);
+}
+
+async function handleSocketListenersEvent(aq: ActiveQuery) {
+  const socket = validateConnection(aq);
+
+  if (!socket) {
+    return;
+  }
+
+  const conn = connections.get(aq.callerInput.id) as SwarmConnection;
+
+  aq.respond([...conn.listeners.values()]);
 }
 
 async function handleSocketExists(aq: ActiveQuery) {
