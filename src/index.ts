@@ -165,8 +165,7 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     aq.respond();
   };
 
-  const cb = async (data: Buffer) => {
-    await socket.mutex?.waitForUnlock();
+  const cb = (data: Buffer) => {
     if (responded) {
       return;
     }
