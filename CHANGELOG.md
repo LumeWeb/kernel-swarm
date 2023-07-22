@@ -1,3 +1,11 @@
+# [0.1.0-develop.1](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.10...v0.1.0-develop.1) (2023-07-22)
+
+
+### Features
+
+* add socketListeners api call ([e56cbec](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/e56cbecbcf6641ea12059868829b9428a3c327c2))
+* track what modules are listening on a socket connection by their module id ([39a9114](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/39a91144de1641ec17ba02888409009310aca67a))
+
 ## [0.0.2-develop.10](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.9...v0.0.2-develop.10) (2023-07-22)
 
 
