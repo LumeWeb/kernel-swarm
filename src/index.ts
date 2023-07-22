@@ -24,7 +24,7 @@ interface SwarmConnection {
   swarm: number;
   conn: any;
   channels: Map<number, Protomux>;
-  listeners: Set<string>;
+  listeners: Map<string, number>;
 }
 
 interface SwarmEvents {
@@ -124,7 +124,7 @@ async function createSwarm(): Promise<number> {
         swarm: id,
         conn: peer,
         channels: new Map<number, Protomux>(),
-        listeners: new Set<string>(),
+        listeners: new Map<string, number>(),
       });
 
       peer.once("close", () => {
@@ -167,7 +167,15 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     }
 
     responded = true;
-    conn.listeners.delete(aq.domain);
+    let count = conn.listeners.get(aq.domain) as number;
+    count--;
+
+    if (count > 0) {
+      conn.listeners.set(aq.domain, count);
+    } else {
+      conn.listeners.delete(aq.domain);
+    }
+
     aq.respond();
   };
 
@@ -189,7 +197,11 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     respond();
   });
 
-  conn.listeners.add(aq.domain);
+  if (!conn.listeners.has(aq.domain)) {
+    conn.listeners.set(aq.domain, 0);
+  }
+
+  conn.listeners.set(aq.domain, (conn.listeners.get(aq.domain) as number) + 1);
 }
 
 async function handleSocketListenersEvent(aq: ActiveQuery) {
@@ -201,7 +213,13 @@ async function handleSocketListenersEvent(aq: ActiveQuery) {
 
   const conn = connections.get(aq.callerInput.id) as SwarmConnection;
 
-  aq.respond([...conn.listeners.values()]);
+  aq.respond(
+    [...conn.listeners.entries()]
+      .filter((item) => {
+        return item[1] > 0;
+      })
+      .map((item) => item[0]),
+  );
 }
 
 async function handleSocketExists(aq: ActiveQuery) {
