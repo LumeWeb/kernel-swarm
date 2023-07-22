@@ -1,3 +1,10 @@
+## [0.0.2-develop.10](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.9...v0.0.2-develop.10) (2023-07-22)
+
+
+### Bug Fixes
+
+* remove mutex and don't make cb async to prevent race condition ([04c7292](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/04c7292e44a9ad272543ff241dad72af4ce5ccaa))
+
 ## [0.0.2-develop.9](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.8...v0.0.2-develop.9) (2023-07-12)
 
 ## [0.0.2-develop.8](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.0.2-develop.7...v0.0.2-develop.8) (2023-07-11)
