@@ -24,6 +24,7 @@ interface SwarmConnection {
   swarm: number;
   conn: any;
   channels: Map<number, Protomux>;
+  listeners: Set<string>;
 }
 
 interface SwarmEvents {
@@ -122,6 +123,7 @@ async function createSwarm(): Promise<number> {
         swarm: id,
         conn: peer,
         channels: new Map<number, Protomux>(),
+        listeners: new Set<string>(),
       });
 
       peer.once("close", () => {
@@ -155,6 +157,8 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     return;
   }
 
+  const conn = connections.get(aq.callerInput.id) as SwarmConnection;
+
   let responded = false;
   const respond = () => {
     if (responded) {
@@ -162,6 +166,7 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     }
 
     responded = true;
+    conn.listeners.delete(aq.domain);
     aq.respond();
   };
 
@@ -182,6 +187,8 @@ function handleSocketListenEvent(aq: ActiveQuery) {
     socket.off(event, cb);
     respond();
   });
+
+  conn.listeners.add(aq.domain);
 }
 
 async function handleSocketExists(aq: ActiveQuery) {
