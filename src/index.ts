@@ -82,6 +82,7 @@ addHandler("socketListenEvent", handleSocketListenEvent, {
 addHandler("socketListeners", handleSocketListenersEvent);
 addHandler("socketWrite", handleWriteSocketEvent);
 addHandler("socketClose", handleCloseSocketEvent);
+addHandler("socketSetKeepAlive", handleSocketSetKeepAliveEvent);
 addHandler("createProtomuxChannel", handleCreateProtomuxChannel, {
   receiveUpdates: true,
 });
@@ -236,6 +237,25 @@ function handleCloseSocketEvent(aq: ActiveQuery) {
   }
 
   socket.end();
+
+  aq.respond();
+}
+
+function handleSocketSetKeepAliveEvent(aq: ActiveQuery) {
+  const socket = validateConnection(aq);
+
+  if (!socket) {
+    return;
+  }
+
+  const { alive = null } = aq.callerInput;
+
+  if (!alive) {
+    aq.reject("alive required");
+    return;
+  }
+
+  socket.setKeepAlive(aq.callerInput.alive);
 
   aq.respond();
 }
