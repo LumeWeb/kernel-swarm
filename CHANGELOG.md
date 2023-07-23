@@ -1,3 +1,10 @@
+# [0.1.0-develop.3](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.1.0-develop.2...v0.1.0-develop.3) (2023-07-23)
+
+
+### Features
+
+* add socketSetKeepAlive api method ([ac58773](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/ac5877385b96b7162a646cadc9b9512759f21bbb))
+
 # [0.1.0-develop.2](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.1.0-develop.1...v0.1.0-develop.2) (2023-07-23)
 
 
