@@ -253,8 +253,6 @@ async function handleWriteSocketEvent(aq: ActiveQuery) {
     return;
   }
 
-  await socket.mutex?.waitForUnlock();
-
   socket.write(message);
 
   aq.respond();
