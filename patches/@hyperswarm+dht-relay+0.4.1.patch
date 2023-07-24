@@ -1,0 +1,13 @@
+diff --git a/node_modules/@hyperswarm/dht-relay/lib/node.js b/node_modules/@hyperswarm/dht-relay/lib/node.js
+index 9ee8ef9..8a37655 100644
+--- a/node_modules/@hyperswarm/dht-relay/lib/node.js
++++ b/node_modules/@hyperswarm/dht-relay/lib/node.js
+@@ -407,7 +407,7 @@ function onNoiseReceive (message) {
+   if (message.isInitiator) {
+     const handshake = this._handshakes.get(message.id)
+ 
+-    if (handshake) {
++    if (handshake && !handshake.complete) {
+       handshake._onNoiseReceive(message)
+     }
+   } else {
