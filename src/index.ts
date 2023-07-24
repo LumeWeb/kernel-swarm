@@ -16,7 +16,7 @@ import { EventEmitter2 as EventEmitter } from "eventemitter2";
 // @ts-ignore
 import Protomux from "protomux";
 import defer, { DeferredPromise } from "p-defer";
-import { concatBytes } from "@lumeweb/libkernel";
+import { concatBytes, hexToBytes } from "@lumeweb/libweb";
 
 const MAX_PEER_LISTENERS = 20;
 
@@ -133,6 +133,9 @@ async function createSwarm(): Promise<number> {
       });
 
       swarmInstanceEvents.emit("connection", peer);
+    });
+    swarmInstance.relays.forEach((relay) => {
+      swarmInstance.activeRelay.joinPeer(hexToBytes(relay));
     });
   });
 
