@@ -1,3 +1,12 @@
+# [0.1.0-develop.4](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.1.0-develop.3...v0.1.0-develop.4) (2023-07-24)
+
+
+### Bug Fixes
+
+* on swarmInstance init, add every relay as an explicit peer ([873bc3d](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/873bc3da52d206635d7dea5f8090e1a05ccf6828))
+* patch dht-relay handshake logic to prevent duplicate processing ([12cb3a3](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/12cb3a3b5ee16bbda03458627a0ea67f89d7576b))
+* patch protomux to use the buffers arraybuffer byteLength ([dcad699](https://git.lumeweb.com/LumeWeb/kernel-swarm/commit/dcad699ae1f5f14e3ffe3844607028a6cd53130e))
+
 # [0.1.0-develop.3](https://git.lumeweb.com/LumeWeb/kernel-swarm/compare/v0.1.0-develop.2...v0.1.0-develop.3) (2023-07-23)
 
 
