@@ -440,7 +440,8 @@ async function handleListenConnections(aq: ActiveQuery) {
   const swarmEvent = swarmEvents.get(swarmId as number)?.events;
 
   if (!swarmEvent) {
-    logErr("swarm event object is missing");
+    aq.reject("swarm event object is missing");
+    return;
   }
 
   swarmEvent?.on("connection", listener);
