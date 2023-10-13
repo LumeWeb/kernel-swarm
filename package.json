@@ -38,7 +38,7 @@
         "patch-package": "^7.0.0",
         "presetter": "*"
     },
-    "version": "0.1.0-develop.10",
+    "version": "0.1.0-develop.11",
     "readme": "ERROR: No README data found!",
     "overrides": {
         "buffer": "^6.0.3"
