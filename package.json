@@ -16,7 +16,7 @@
     },
     "type": "module",
     "dependencies": {
-        "@lumeweb/hyperswarm-web": "0.0.2-develop.12",
+        "@lumeweb/hyperswarm-web": "0.0.2-develop.13",
         "@lumeweb/libkernel": "^0.1.0-develop.44",
         "@lumeweb/rpc": "0.0.2-develop.1",
         "@noble/curves": "^1.1.0",
